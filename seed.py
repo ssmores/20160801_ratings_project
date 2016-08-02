@@ -37,6 +37,23 @@ def load_users():
 def load_movies():
     """Load movies from u.item into database."""
 
+    print "Movies"
+
+    Movie.query.delete() 
+
+    for row in open("seed_data/u.item"): 
+        row = row.rstrip()
+        row = row.split("|")
+
+        movie_id = row[0]
+        title = row[1].split("(")[0]
+        release_at = row[2]
+        imdb_url = row[4]
+
+
+
+
+
 
 def load_ratings():
     """Load ratings from u.data into database."""
