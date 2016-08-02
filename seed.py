@@ -2,11 +2,13 @@
 
 from sqlalchemy import func
 from model import User
-# from model import Rating
-# from model import Movie
+from model import Rating
+from model import Movie
 
 from model import connect_to_db, db
 from server import app
+
+from datetime import datetime
 
 
 def load_users():
@@ -46,11 +48,24 @@ def load_movies():
         row = row.split("|")
 
         movie_id = row[0]
-        title = row[1].split("(")[0]
-        release_at = row[2]
+        title = row[1].split("(")[0].rstrip()
+        release_string = row[2]
+
+        if release_string == "": 
+            release_at = None 
+        else: 
+            release_at = datetime.strptime(release_string, "%d-%b-%Y")
+        
         imdb_url = row[4]
 
+        movie = Movie(movie_id=movie_id, 
+                      title=title, 
+                      release_at=release_at,
+                      imdb_url=imdb_url)
 
+        db.session.add(movie)
+
+    db.session.commit()
 
 
 
@@ -58,13 +73,41 @@ def load_movies():
 def load_ratings():
     """Load ratings from u.data into database."""
 
+    print "Ratings"
+
+    Rating.query.delete()
+
+    # rating_id = 0
+
+    for row in open("seed_data/u.data"):
+        row = row.rstrip()
+        row = row.split("\t")
+
+        # rating_id += 1
+        user_id = row[0]
+        movie_id = row[1]
+        score = row[2]
+
+        rating = Rating(user_id=user_id,
+                        movie_id=movie_id,
+                        score=score)
+
+        db.session.add(rating)
+
+    db.session.commit()
+
+
 
 def set_val_user_id():
     """Set value for the next user_id after seeding database"""
 
     # Get the Max user_id in the database
     result = db.session.query(func.max(User.user_id)).one()
+    # result is a list? or object??????? 
+    print result
+
     max_id = int(result[0])
+
 
     # Set the value for the next user_id to be max_id + 1
     query = "SELECT setval('users_user_id_seq', :new_id)"
