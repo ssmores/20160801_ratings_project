@@ -32,6 +32,14 @@ def user_list():
     users = User.query.all()
     return render_template("user_list.html", users=users)
 
+@app.route('/users/<user_id>')
+def show_user_info(user_id):
+    """Show user information."""
+
+    
+
+    return render_template("user_detail.html")
+
 @app.route('/login', methods=['GET'])
 def login():
     """User login screen."""
@@ -50,6 +58,7 @@ def login_or_create_new():
     if dbuser:
         if dbuser.password == password:
             flash("Logged in")
+            session["logged_in_useremail"] = email
             return redirect("/")
         else: 
             flash("Wrong Password")
@@ -59,9 +68,19 @@ def login_or_create_new():
         db.session.add(user)
         db.session.commit()
         flash("You are added.")
+        session["logged_in_useremail"] = email
         return redirect('/')
 
-    session["logged_in_useremail"] = email
+
+@app.route('/logout')
+def logout():
+    """User successfully loged out."""
+
+    print session.keys()
+    session.pop("logged_in_useremail", None)
+    print session.keys()
+    flash("You are now logged out.")
+    return redirect('/')
 
 
 
