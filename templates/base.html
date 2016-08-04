@@ -1,14 +1,18 @@
 <!doctype html>
 <html>
-<head>
-  <title>Ratings</title>
-</head>
+    <head>
+      <title>Ratings</title>
+    </head>
 
-<body>
-  Ratings
-  <hr>
+    <body>
+      Ratings
+      <hr>
 
-  {% block content %} put your content here {% endblock %}
+      {% block content %} put your content here {% endblock %}
 
-</body>
+      {% for message in get_flashed_messages() %}
+        {{ message }}
+      {% endfor %}
+
+    </body>
 </html>

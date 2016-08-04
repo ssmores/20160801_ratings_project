@@ -45,33 +45,23 @@ def login_or_create_new():
     email = request.form.get("user_email")
     password = request.form.get("password")
 
-    credentials = db.session.query(User.email, User.password).all()
+    dbuser = User.query.filter(User.email == email).first()
 
-    # if (email, password) in list_of_credentials:
-    #     return redirect('/')
-    # else: 
-    #     user = User(email=email, password=password)
-    #     db.session.add(user)
-    #     db.session.commit()
-    #     return redirect('/')
-
-    for credential in credentials: 
-        if email == credential[0] and password == credential[1]:
-            print "Success"
-            return redirect('/')
+    if dbuser:
+        if dbuser.password == password:
+            flash("Logged in")
+            return redirect("/")
         else: 
-            print "NO"
-            return redirect('/login')
-        # else: 
-        #     user = User(email=email, password=password)
-        #     db.session.add(user)
-        #     db.session.commit()
-        #     return redirect('/')
+            flash("Wrong Password")
+            return redirect("/login")
+    else:
+        user = User(email=email, password=password)
+        db.session.add(user)
+        db.session.commit()
+        flash("You are added.")
+        return redirect('/')
 
-
-
-
-
+    session["logged_in_useremail"] = email
 
 
 
