@@ -1,16 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-This is info on {{ user.user_id }}
+<h2> HELLO!!</h2>
+
+
+This is info on {{ user_id }}
 
 <ul>
-    <li> {{ age }} </li>
-    <li> {{ zipcode }} </li>
-    <li> 
+    <li>Age: {{ age }} </li>
+    <li>Zipcode: {{ zipcode }} </li>
+
+    <li> Here are all the movies {{ user_id }} has reviewed:
         <ul> 
-            {% for rating in ratings %}
-            <li> {{ rating }} </li> 
-            {% endfor %}
+            {% if ratings == [] %}
+                <li> Hasn't rated anything yet! </li> 
+            {% else %}
+
+                {% for rating in ratings %}
+                <li> {{ rating.movie.title }} : {{ rating.score }} </li> 
+                {% endfor %}
+            {% endif %}
         </ul>
 </ul>
+
 {% endblock %}
