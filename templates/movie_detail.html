@@ -11,6 +11,14 @@
     <li>{{ rating.user_id }} gave it a {{ rating.score }}</li>
     {% endfor %}
 </ul>
+<hr>
+
+{% if 'logged_in_useremail' in session %}
+    <a href="/create_rating/<>">Create a new rating</a><br>
+    <a href="/update_rating">Update your rating</a>
+    
+
+{% endif %}
 
 {% endblock %}
 

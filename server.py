@@ -71,14 +71,19 @@ def movie_details(movie_id):
     url = movie_detail.imdb_url
 
     ratings = movie_detail.ratings
-    
 
     return render_template("movie_detail.html", 
                            movie=movie_detail, 
                            title=title,
                            release_date=release_date,
                            url=url,
-                           ratings=ratings)
+                           ratings=ratings,
+                           session=session)
+
+@app.route('/create_rating')
+def create_new_rating():
+
+    return "<html><body>We will insert form fields for a movie here.</body></html>"
 
 
 @app.route('/login', methods=['GET'])
